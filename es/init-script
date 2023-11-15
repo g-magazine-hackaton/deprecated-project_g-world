@@ -1,0 +1,54 @@
+#!/bin/bash
+
+# Elasticsearch 호스트
+ES_HOST="localhost:9200"
+
+# Elasticsearch가 시작될 때까지 대기
+until curl -s $ES_HOST -o /dev/null; do
+    echo "Waiting for Elasticsearch...🥲"
+    sleep 5
+done
+
+echo "Elasticsearch started!!😎"
+
+# 인덱스 생성
+curl -X PUT "$ES_HOST/test" -H 'Content-Type: application/json' -d'
+{
+  "mappings": {
+    "properties": {
+      "name": {
+        "type": "text"
+      },
+      "company": {
+        "type": "text"
+      },
+      "team": {
+        "type": "text"
+      }
+    }
+  }
+}'
+
+# 데이터 Bulk 삽입
+curl -X POST "$ES_HOST/_bulk" -H 'Content-Type: application/json' -d'
+{ "index" : { "_index" : "test", "_id" : "1" } }
+{ "name" : "박우림", "company" : "지마켓", "team" : "로켓죄송" }
+{ "index" : { "_index" : "test", "_id" : "2" } }
+{ "name" : "신예은", "company" : "지마켓", "team" : "로켓죄송" }
+{ "index" : { "_index" : "test", "_id" : "3" } }
+{ "name" : "Hong Gil-dong", "company" : "Example Inc", "team" : "Development" }
+'
+
+# 데이터 업데이트
+curl -X POST "$ES_HOST/test/_update/1" -H 'Content-Type: application/json' -d'
+{
+  "doc": {
+    "team": "로켓지송"
+  }
+}'
+
+# 데이터 조회
+curl -X GET "$ES_HOST/test/_search"
+
+# 인덱스 삭제
+# curl -X DELETE "$ES_HOST/test"

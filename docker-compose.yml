@@ -6,12 +6,13 @@ services:
     container_name: elasticsearch
     environment:
       - discovery.type=single-node
-      - network.host=0.0.0.0
+      #- network.host=0.0.0.0
     ports:
       - "9200:9200"
       - "9300:9300"
     volumes:
-      - ./es-data:/usr/share/elasticsearch/data
+      - ./es/data:/usr/share/elasticsearch/data   # es 데이터가 적재될 폴더 마운트
+      - ./es/init-script:/usr/local/bin/init-script  # 초기 데이터 셋 구성을 위한 스크립트 마운트
     networks:
       - elastic
 

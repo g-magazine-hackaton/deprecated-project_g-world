@@ -49,7 +49,19 @@ cd ../
 docker-compose up -d
 ```
 
-### 2. Expo 서버 실행
+### 2. ES 초기 데이터셋 구축
+
+> **필수 데이터**는 `./es/init-script` 파일에 기재하여 모두가 자동 구축 가능하도록 해주세요.
+
+구동된 Elasticsearch 컨테이너에 초기 데이터셋을 구축합니다.
+서비스 가동을 위해 필수적인 데이터입니다.
+
+```bash
+# 스크립트 실행
+bash ./es/init-script
+```
+
+### 3. Expo 서버 실행
 
 Expo 서버를 시작합니다.
 
@@ -58,7 +70,25 @@ Expo 서버를 시작합니다.
 npm start
 ```
 
-### 3. QR 코드 스캔
+### 4. QR 코드 스캔
 
 - 터미널에 노출된 QR 코드를 모바일 폰으로 스캔합니다.
 - 모바일 폰에 Expo 앱이 설치되어 있어야 합니다. (OS 별 앱스토어에서 다운로드 가능합니다.)
+
+## Kibana 접속
+
+> 접속 링크: http://localhost:5601
+
+localhost의 5601 포트로 접속하면 키바나에 접근할 수 있습니다.
+
+### 초기 데이터 확인
+
+테스트 인덱스: test
+
+```bash
+# in Kibana devtools
+GET /test/_search
+
+# in Terminal
+curl -X GET "localhost:9200/test/_search"
+```

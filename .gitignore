@@ -3,6 +3,9 @@
 # dependencies
 node_modules/
 
+# ElasticSearch
+data/
+
 # Expo
 .expo/
 dist/
